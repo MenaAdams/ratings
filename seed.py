@@ -2,7 +2,7 @@
 
 from sqlalchemy import func
 from model import User
-# from model import Rating
+from model import Rating
 from model import Movie
 import datetime
 from model import connect_to_db, db
@@ -60,6 +60,27 @@ def load_movies():
 
 def load_ratings():
     """Load ratings from u.data into database."""
+    print("Ratings")
+
+    Rating.query.delete()
+
+    with open("seed_data/u.data") as ratings:
+        for row in ratings:
+            row = row.rstrip()
+            info = row.split()
+            
+            movie_id, user_id, score = (info[0], info[1], info[2])
+
+            rating = Rating(
+                        movie_id=movie_id,
+                        user_id=user_id,
+                        score=score
+                        )
+
+
+            db.session.add(rating)
+
+        db.session.commit()
 
 
 def set_val_user_id():
