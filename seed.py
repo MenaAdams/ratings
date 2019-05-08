@@ -46,7 +46,7 @@ def load_movies():
             info = row.split("|")
             #strip release time into a datetime object
             released_at = datetime.datetime.strptime(info[2], "%d-%b-%Y")
-            movie_id, title, imdb_url = (info[0], info[1][:-6], info[4])
+            movie_id, title, imdb_url = (info[0], info[1][:-7], info[4])
 
             movie = Movie(movie_id=movie_id,
                         title=title,
@@ -69,7 +69,7 @@ def load_ratings():
             row = row.rstrip()
             info = row.split()
             
-            movie_id, user_id, score = (info[0], info[1], info[2])
+            user_id, movie_id, score = (info[0], info[1], info[2])
 
             rating = Rating(
                         movie_id=movie_id,
