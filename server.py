@@ -2,10 +2,12 @@
 
 from jinja2 import StrictUndefined
 
-from flask import Flask, render_template, redirect, request, flash, session
+from flask import Flask, render_template, redirect, request, flash, session, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
 
 from model import connect_to_db, db, User, Rating, Movie
+
+
 
 
 app = Flask(__name__)
@@ -77,9 +79,9 @@ def check_logged_in():
 
     if user_object:
         if user_object.password == password:
-            session["login"] = True
+            session["login"] = user_object.email
             flash(f"Hey, welcome back {user_object.email} of zipcode {user_object.zipcode}")
-            return redirect("/")
+            return redirect(f"/user/{user_object.user_id}")
         else:
             flash(f"""You're wrong. Are you even {user_object.email} of zipcode {user_object.zipcode}?
                       The password is actually {user_object.password}""")
@@ -94,6 +96,27 @@ def log_out():
     session["login"] = False
     flash("Logged out")
     return redirect("/")
+
+@app.route("/user/<user_id>")
+def user_page(user_id):
+
+    user = User.query.get(user_id)
+
+    return render_template('user_page.html',
+                            user=user) 
+
+@app.route("/movies")
+def movie_list():
+    movies = Movie.query.order_by('title').all()
+
+    return render_template("movie_list.html", movies=movies)
+
+@app.route("/movie/<movie_id>")
+def movie_details(movie_id):
+
+    movie = Movie.query.get(movie_id)
+
+    return render_template('movie_page.html', movie=movie)
 
 if __name__ == "__main__":
     # We have to set debug=True here, since it has to be True at the
