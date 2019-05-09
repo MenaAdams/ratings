@@ -1,17 +1,17 @@
 {% extends 'base.html' %}
 {% block title %} Homepage {% endblock %}
 {% block content %}
-
+<!-- 'login' in session and  -->
 <h1>Ratings</h1>
-{% if 'login' in session and session['login'] == False %}
-<a href ="/login">
-    Login Here: <br>
-    <img src="https://media.giphy.com/media/o0vwzuFwCGAFO/giphy.gif">
-</a>
-{% else %}
+{% if session.get('login') %}
 <a href="/log-out">
     Log out: <br>
     <img src="https://media1.giphy.com/media/tx7iPVH3XHlio/giphy.gif">
+</a>
+{% else %}
+<a href ="/login">
+    Login Here: <br>
+    <img src="https://media.giphy.com/media/o0vwzuFwCGAFO/giphy.gif">
 </a>
 {% endif %}
 

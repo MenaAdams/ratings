@@ -79,7 +79,7 @@ def check_logged_in():
 
     if user_object:
         if user_object.password == password:
-            session["login"] = user_object.email
+            session["login"] = user_object.user_id
             flash(f"Hey, welcome back {user_object.email} of zipcode {user_object.zipcode}")
             return redirect(f"/user/{user_object.user_id}")
         else:
@@ -117,6 +117,33 @@ def movie_details(movie_id):
     movie = Movie.query.get(movie_id)
 
     return render_template('movie_page.html', movie=movie)
+
+@app.route("/rate-movie", methods=["POST"])
+def rate_movie():
+    """Process movie ratings """
+    rating = request.args.get("rating")
+    score, movie_id = rating.split()
+    user_id = session['login']
+    movie = Movie.query.get(movie_id)
+    existing_user_rating = Rating.query.filter((Rating.user_id==user_id) & (Rating.movie_id==movie_id)).first()
+
+    if existing_user_rating:
+        print("Before", existing_user_rating.score)
+        existing_user_rating.score = score
+        print("After", existing_user_rating.score)
+
+    else:
+        rating = Rating(
+            movie_id=movie_id,
+            user_id=user_id,
+            score=score
+            )
+        db.session.add(rating)
+
+    db.session.commit()
+
+    return redirect(f"/movie/{movie_id}")
+
 
 if __name__ == "__main__":
     # We have to set debug=True here, since it has to be True at the

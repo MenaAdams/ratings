@@ -5,6 +5,24 @@
 <h1>{{ movie.title }}</h1>
 URL: <a href="{{ movie.imdb_url }}">IMDB page</a>
 
+{% if session.get('login') %}
+
+<form action="/rate-movie" method="POST">
+    1<input type="radio" name="rating" value="1 {{ movie.movie_id }}">
+    2<input type="radio" name="rating" value="2 {{ movie.movie_id }}">
+    3<input type="radio" name="rating" value="3 {{ movie.movie_id }}">
+    4<input type="radio" name="rating" value="4 {{ movie.movie_id }}">
+    5<input type="radio" name="rating" value="5 {{ movie.movie_id }}">
+    <input type="submit">
+</form>
+
+{% else %}
+
+<h3><a href="/login">Login To Rate This Movie!</a></h3>
+
+{% endif %}
+
+
 <ul>
 {% for rating in movie.ratings %}
 

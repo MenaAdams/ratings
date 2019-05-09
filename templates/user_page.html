@@ -2,8 +2,9 @@
 {% block title %} {{ user.email }} {% endblock %}
 {% block content %}
 
-Age: {{ user.age }}
-Zipcode: {{ user.zipcode }}
+<h2>Age: {{ user.age }}</h2><br>
+<h2>Zipcode: {{ user.zipcode }}</h2><br>
+<a href="/">Return to homepage</a>
 
 <ul>
 {% for rating in user.ratings %}
