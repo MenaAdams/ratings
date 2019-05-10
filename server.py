@@ -121,7 +121,7 @@ def movie_details(movie_id):
 @app.route("/rate-movie", methods=["POST"])
 def rate_movie():
     """Process movie ratings """
-    rating = request.args.get("rating")
+    rating = request.form.get("rating")
     score, movie_id = rating.split()
     user_id = session['login']
     movie = Movie.query.get(movie_id)
@@ -142,7 +142,7 @@ def rate_movie():
 
     db.session.commit()
 
-    return redirect(f"/movie/{movie_id}")
+    return redirect(f"/movies")
 
 
 if __name__ == "__main__":
